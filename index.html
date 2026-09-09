@@ -8,39 +8,43 @@
   <meta property="og:title" content="PointLAM">
   <meta property="og:description" content="Local Attentive Mamba for efficient point-based 3D object detection.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="assets/images/teaser.png">
+  <meta property="og:image" content="https://pointlam.github.io/assets/images/teaser.png">
+  <meta property="og:url" content="https://pointlam.github.io/">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="canonical" href="https://pointlam.github.io/">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
   <header class="hero">
     <div class="container">
-      <p class="venue">ECCV 2026</p>
-      <h1>PointLAM: Local Attentive Mamba for Efficient Point-based 3D Object Detection</h1>
-      <p class="subtitle">A point-based LiDAR detector that preserves fine-grained geometry while closing the efficiency gap with highly optimized voxel-based models.</p>
+      <p class="venue">European Conference on Computer Vision <span>ECCV 2026</span></p>
+      <h1><span class="project-name">PointLAM</span><span class="project-title">Local Attentive Mamba for<br class="title-break"> Efficient Point-based 3D Object Detection</span></h1>
 
       <div class="authors" aria-label="Authors">
         <span>Xuanming Shang</span>
         <span>Weijia Zhang</span>
         <span>Chao Ma</span>
       </div>
-      <p class="affiliation">MoE Key Lab of Artificial Intelligence, Institute of AI, Shanghai Jiao Tong University</p>
+      <p class="affiliation"><strong>Shanghai Jiao Tong University</strong><span>MoE Key Lab of Artificial Intelligence · Institute of AI</span></p>
 
       <nav class="links" aria-label="Project links">
-        <a href="assets/PointLAM_ECCV26.pdf">Paper</a>
-        <a href="#bibtex">BibTeX</a>
-        <span class="disabled-link" aria-disabled="true">Code coming soon</span>
+        <a class="primary-link" href="assets/PointLAM_ECCV26.pdf"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h6"/></svg>Read the paper</a>
+        <a href="#bibtex"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8H4v8h6v-6H4m14-2h-4v8h6v-6h-6"/></svg>BibTeX</a>
+        <span class="disabled-link">Code <span class="coming-soon">coming soon</span></span>
       </nav>
     </div>
 
     <figure class="teaser">
-      <img src="assets/images/teaser.png" alt="Comparison of set-based, voxel-based, and PointLAM point-based processing, with a performance and speed plot.">
-      <figcaption>PointLAM keeps a point-based representation while offering a competitive accuracy-efficiency trade-off on nuScenes.</figcaption>
+      <a class="figure-link" href="assets/images/teaser.png" target="_blank" rel="noopener" title="Open full-size figure (new tab)"><img src="assets/images/teaser.png" width="2775" height="632" alt="Comparison of set-based, voxel-based, and PointLAM point-based processing, with a performance and speed plot."></a>
+      <figcaption><strong>Point-based geometry. Efficient detection.</strong> PointLAM preserves fine-grained point representations while offering a competitive accuracy–efficiency trade-off.</figcaption>
     </figure>
   </header>
 
-  <main>
-    <section class="section">
+  <main id="main">
+    <section id="abstract" class="section abstract-section">
       <div class="container narrow">
+        <p class="eyebrow">The problem &amp; the idea</p>
         <h2>Abstract</h2>
         <p>
           3D object detection from LiDAR point clouds faces a core dilemma: voxel-based methods are efficient but lose geometric fidelity through quantization, while point-based methods preserve raw structure but suffer from slow downsampling and costly neighborhood queries. PointLAM addresses these bottlenecks with two complementary designs. The Laplacian Point Sampler (LPS) uses an implicit discrete Laplacian high-pass filter and Doubly Sorted Sampling to retain structure-aware foreground points efficiently. The Local Hadamard Aggregator (LHA) decouples spatial indexing from point feature representation through transient grids and replaces expensive continuous interactions with lightweight Hadamard gating. Combined with Bi-Directional Mamba layers, these components form Local Attentive Mamba blocks for efficient local and global modeling.
@@ -48,31 +52,13 @@
       </div>
     </section>
 
-    <section class="section tinted">
-      <div class="container">
-        <h2>Key Ideas</h2>
-        <div class="idea-grid">
-          <article>
-            <h3>Laplacian Point Sampler</h3>
-            <p>LPS highlights high-frequency geometric structures such as boundaries and corners, then keeps salient points through fast global and regional sorting instead of iterative FPS.</p>
-          </article>
-          <article>
-            <h3>Local Hadamard Aggregator</h3>
-            <p>LHA uses a transient grid only as a deterministic spatial router. Point features remain continuous, while local topology modulates channels through Hadamard gating.</p>
-          </article>
-          <article>
-            <h3>Local Attentive Mamba</h3>
-            <p>LAM blocks anchor local geometry before serialization and use Bi-Directional Mamba layers to model long-range dependencies with linear sequence complexity.</p>
-          </article>
-        </div>
-      </div>
-    </section>
 
     <section class="section">
       <div class="container">
-        <h2>Architecture</h2>
+        <p class="eyebrow">Inside PointLAM</p>
+        <h2>A local–global view of point clouds</h2>
         <figure class="paper-figure">
-          <img src="assets/images/architecture.png" alt="PointLAM architecture showing LPS, LHA, BDM-X and BDM-Y layers, BEV backbone, and detection head.">
+          <a class="figure-link" href="assets/images/architecture.png" target="_blank" rel="noopener" title="Open full-size figure (new tab)"><img src="assets/images/architecture.png" width="2482" height="1245" loading="lazy" alt="PointLAM architecture showing LPS, LHA, BDM-X and BDM-Y layers, BEV backbone, and detection head."></a>
           <figcaption>
             PointLAM first performs structure-aware point sampling, then stacks Local Attentive Mamba blocks that pair topology-aware local gating with axis-wise Bi-Directional Mamba layers.
           </figcaption>
@@ -80,24 +66,45 @@
       </div>
     </section>
 
+    <section class="section ideas-section">
+      <div class="container">
+        <h2 class="visually-hidden">Key ideas</h2>
+        <div class="idea-grid">
+          <article>
+            <span class="idea-number">01</span><h3>Laplacian Point Sampler</h3>
+            <p>LPS highlights high-frequency geometric structures such as boundaries and corners, then keeps salient points through fast global and regional sorting instead of iterative FPS.</p>
+          </article>
+          <article>
+            <span class="idea-number">02</span><h3>Local Hadamard Aggregator</h3>
+            <p>LHA uses a transient grid only as a deterministic spatial router. Point features remain continuous, while local topology modulates channels through Hadamard gating.</p>
+          </article>
+          <article>
+            <span class="idea-number">03</span><h3>Local Attentive Mamba</h3>
+            <p>LAM blocks anchor local geometry before serialization and use Bi-Directional Mamba layers to model long-range dependencies with linear sequence complexity.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <section class="section tinted">
       <div class="container">
-        <h2>Results</h2>
+        <p class="eyebrow">Reported in the paper</p>
+        <h2>Accuracy meets efficiency</h2>
         <div class="metric-grid">
           <article>
             <strong>73.0</strong>
             <span>nuScenes test NDS</span>
-            <p>with 68.8 mAP, establishing a strong point-based detector baseline.</p>
+            <p>68.8 mAP · single model</p>
           </article>
           <article>
             <strong>74.4</strong>
             <span>Waymo test L2 mAPH</span>
-            <p>with 79.8 L1 mAPH under the single-frame setting.</p>
+            <p>79.8 L1 mAPH · single frame</p>
           </article>
           <article>
             <strong>90.7G</strong>
             <span>FLOPs</span>
-            <p>with 8.6M parameters and 93.1ms latency on a single NVIDIA A800 GPU.</p>
+            <p>8.6M parameters · 93.1 ms on NVIDIA A800</p>
           </article>
         </div>
         <p class="result-note">
@@ -108,9 +115,10 @@
 
     <section class="section">
       <div class="container">
-        <h2>Qualitative Detection</h2>
+        <p class="eyebrow">Seeing the details</p>
+        <h2>Detection in sparse scenes</h2>
         <figure class="paper-figure dark">
-          <img src="assets/images/sparsity.png" alt="Qualitative detection examples in sparse LiDAR point clouds with ground truth and predicted boxes.">
+          <a class="figure-link" href="assets/images/sparsity.png" target="_blank" rel="noopener" title="Open full-size figure (new tab)"><img src="assets/images/sparsity.png" width="1467" height="758" loading="lazy" alt="Qualitative detection examples in sparse LiDAR point clouds with ground truth and predicted boxes."></a>
           <figcaption>
             Qualitative examples show accurate localization in sparse and cluttered scenes, supporting the point-level geometric fidelity preserved by PointLAM.
           </figcaption>
@@ -121,20 +129,22 @@
     <section class="section tinted">
       <div class="container two-column">
         <div>
-          <h2>Feature Visualization</h2>
+          <p class="eyebrow">What the model sees</p>
+          <h2>Structure-aware features</h2>
           <p>
             Points retained by the sampler and processed by LHA concentrate high responses around object structures. The visualization highlights how PointLAM keeps informative foreground geometry instead of relying on coarse voxel aggregation.
           </p>
         </div>
         <figure class="compact-figure">
-          <img src="assets/images/visualization.png" alt="Visualization of sampled points colored by feature magnitude.">
+          <a class="figure-link" href="assets/images/visualization.png" target="_blank" rel="noopener" title="Open full-size figure (new tab)"><img src="assets/images/visualization.png" width="742" height="742" loading="lazy" alt="Visualization of sampled points colored by feature magnitude."></a>
         </figure>
       </div>
     </section>
 
     <section id="bibtex" class="section">
       <div class="container narrow">
-        <h2>BibTeX</h2>
+        <div class="citation-heading"><div><p class="eyebrow">Reference</p><h2>Cite PointLAM</h2></div><button id="copy-citation" type="button" hidden>Copy BibTeX</button></div>
+        <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
         <pre><code>@inproceedings{shang2026pointlam,
   title={PointLAM: Local Attentive Mamba for Efficient Point-based 3D Object Detection},
   author={Shang, Xuanming and Zhang, Weijia and Ma, Chao},
@@ -147,8 +157,9 @@
 
   <footer>
     <div class="container">
-      <p>Project page for PointLAM. Page structure is inspired by classic academic project pages such as Nerfies, NeRF, and Point-NeRF.</p>
+      <p><strong>PointLAM</strong> · ECCV 2026 <span>Shanghai Jiao Tong University</span></p>
     </div>
   </footer>
+  <script src="script.js" defer></script>
 </body>
 </html>
